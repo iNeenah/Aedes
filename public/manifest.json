@@ -1,0 +1,64 @@
+{
+  "short_name": "Vigilantes Aedes",
+  "name": "Vigilantes del Aedes - Sistema de Reportes Web",
+  "description": "Aplicación web para reportar criaderos del mosquito Aedes aegypti en Posadas, Misiones",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "browser",
+  "display_override": ["window-controls-overlay", "minimal-ui", "browser"],
+  "theme_color": "#2563eb",
+  "background_color": "#f8fafc",
+  "orientation": "any",
+  "scope": "/",
+  "lang": "es-AR",
+  "categories": ["health", "utilities", "government", "productivity"],
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Nuevo Reporte",
+      "short_name": "Reportar",
+      "description": "Crear un nuevo reporte de criadero",
+      "url": "/",
+      "icons": [
+        {
+          "src": "favicon.ico",
+          "sizes": "32x32"
+        }
+      ]
+    },
+    {
+      "name": "Ver Mapa",
+      "short_name": "Mapa",
+      "description": "Visualizar reportes en el mapa",
+      "url": "/",
+      "icons": [
+        {
+          "src": "favicon.ico",
+          "sizes": "32x32"
+        }
+      ]
+    }
+  ],
+  "protocol_handlers": [
+    {
+      "protocol": "web+vigilantes",
+      "url": "/?handler=%s"
+    }
+  ]
+}
