@@ -6,17 +6,20 @@ Una aplicación web progresiva (PWA) que permite a los ciudadanos reportar criad
 
 ## Características Principales
 
+- **Mapa de Calor Inteligente**: Visualización de criticidad temporal con Leaflet.heat
+- **Sistema de Criticidad Evolutiva**: Los usuarios evalúan la gravedad inicial, que evoluciona con el tiempo
 - **Geolocalización Interactiva**: Mapeo preciso de criaderos
 - **IA Gemini 2.0**: Ajuste automático de ubicaciones
 - **Progressive Web App**: Funciona offline e instalable
 - **Tiempo Real**: Sincronización instantánea con Supabase
-- **Mapas Interactivos**: Visualización de reportes en tiempo real
+- **Mapas Interactivos**: Visualización de reportes con capas intercambiables
 
 ## Stack Tecnológico
 
 - React 18.2.0
 - Tailwind CSS 3.3.0
 - React-Leaflet 4.2.1
+- **Leaflet.heat**: Mapas de calor para visualización de criticidad
 - Supabase (PostgreSQL + Storage)
 - Google Gemini 2.0 API
 - PWA Service Workers
@@ -82,8 +85,13 @@ La aplicación estará disponible en `http://localhost:3001`
 
 El archivo `setup_supabase.sql` crea:
 - Tabla `reports` para almacenar reportes de criaderos
+- **Nuevas columnas de criticidad**:
+  - `initial_criticality`: Nivel inicial evaluado por el usuario (BAJA, MEDIA, ALTA, CRÍTICA)
+  - `criticality_weight`: Peso numérico para el mapa de calor (0.3, 0.6, 0.9, 1.0)
 - Políticas RLS para acceso público de lectura
 - Triggers para timestamps automáticos
+
+**Para bases de datos existentes**: Ejecuta también `migration_criticality.sql`
 
 ### 2. Storage
 
@@ -102,16 +110,36 @@ El archivo `storage_policies.sql` configura:
 
 ```
 pwa/
-├── public/                 # Archivos estáticos y PWA
+├── public/                    # Archivos estáticos y PWA
 ├── src/
-│   ├── App.jsx            # Componente principal
-│   ├── index.js           # Punto de entrada
-│   ├── index.css          # Estilos globales
-│   └── lib/               # Configuraciones
-├── setup_supabase.sql     # Script de BD
-├── storage_policies.sql   # Políticas de storage
-└── package.json           # Dependencias
+│   ├── App.jsx               # Componente principal con mapa de calor
+│   ├── index.js              # Punto de entrada
+│   ├── index.css             # Estilos globales
+│   └── lib/                  # Configuraciones
+├── setup_supabase.sql        # Script de BD principal
+├── migration_criticality.sql # Migración para criticidad (BD existentes)
+├── storage_policies.sql      # Políticas de storage
+└── package.json              # Dependencias
 ```
+
+## Funcionalidades del Mapa de Calor
+
+### Niveles de Criticidad
+- **🟢 BAJA**: Criaderos pequeños o controlables (peso: 0.3)
+- **🟡 MEDIA**: Criaderos de tamaño medio (peso: 0.6) 
+- **🟠 ALTA**: Criaderos grandes o múltiples (peso: 0.9)
+- **🔴 CRÍTICA**: Situaciones de emergencia (peso: 1.0)
+
+### Evolución Temporal
+- La criticidad inicial marcada por el usuario evoluciona con el tiempo
+- Incremento automático: +0.05 cada 3 días transcurridos
+- Máximo peso: 1.0 (100% criticidad)
+
+### Controles Interactivos
+- Toggle para mostrar/ocultar mapa de calor
+- Toggle para mostrar/ocultar marcadores individuales
+- Leyenda explicativa de niveles de criticidad
+- Estadísticas en tiempo real
 
 ## Scripts Disponibles
 
@@ -139,14 +167,16 @@ npm run build
 ### Error de conexión a Supabase
 - Verifica que las URLs y keys en `.env` sean correctas
 - Asegúrate de que el proyecto Supabase esté activo
+- Si tienes una BD existente, ejecuta `migration_criticality.sql`
 
 ### Error de Gemini API
 - Verifica que la API key sea válida
 - Confirma que tienes créditos disponibles en Google AI
 
 ### Problemas con el mapa
-- Verifica conexión a internet
+- Verifica conexión a internet  
 - Los tiles de OpenStreetMap pueden tardar en cargar
+- Si el mapa de calor no aparece, verifica que `leaflet.heat` esté instalado
 
 ### Service Worker no funciona
 - Asegúrate de estar en HTTPS o localhost

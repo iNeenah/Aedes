@@ -8,7 +8,9 @@ CREATE TABLE IF NOT EXISTS reports (
     description TEXT,
     photo_url TEXT NOT NULL,
     latitude FLOAT8 NOT NULL,
-    longitude FLOAT8 NOT NULL
+    longitude FLOAT8 NOT NULL,
+    initial_criticality TEXT DEFAULT 'BAJA',
+    criticality_weight FLOAT8 DEFAULT 0.3
 );
 
 -- 2. Enable Row Level Security
@@ -31,12 +33,12 @@ FOR INSERT WITH CHECK (true);
 -- Go to Storage > Create Bucket > Name: "reports" > Public: true
 
 -- 5. Insert sample data for testing
-INSERT INTO reports (description, photo_url, latitude, longitude) VALUES
-('Recipiente con agua estancada en patio trasero', 'https://via.placeholder.com/400x300/14b8a6/ffffff?text=Criadero+1', -27.3671, -55.8961),
-('Maceta abandonada con agua de lluvia acumulada', 'https://via.placeholder.com/400x300/f97316/ffffff?text=Criadero+2', -27.368, -55.897),
-('Neumático viejo con acumulación de agua', 'https://via.placeholder.com/400x300/dc2626/ffffff?text=Criadero+3', -27.366, -55.895),
-('Balde plástico en jardín con agua estancada', 'https://via.placeholder.com/400x300/059669/ffffff?text=Criadero+4', -27.3580, -55.9020),
-('Canaleta obstruida con agua acumulada', 'https://via.placeholder.com/400x300/7c3aed/ffffff?text=Criadero+5', -27.3750, -55.8700)
+INSERT INTO reports (description, photo_url, latitude, longitude, initial_criticality, criticality_weight) VALUES
+('Recipiente con agua estancada en patio trasero', 'https://via.placeholder.com/400x300/14b8a6/ffffff?text=Criadero+1', -27.3671, -55.8961, 'BAJA', 0.3),
+('Maceta abandonada con agua de lluvia acumulada', 'https://via.placeholder.com/400x300/f97316/ffffff?text=Criadero+2', -27.368, -55.897, 'MEDIA', 0.6),
+('Neumático viejo con acumulación de agua', 'https://via.placeholder.com/400x300/dc2626/ffffff?text=Criadero+3', -27.366, -55.895, 'ALTA', 0.9),
+('Balde plástico en jardín con agua estancada', 'https://via.placeholder.com/400x300/059669/ffffff?text=Criadero+4', -27.3580, -55.9020, 'CRITICA', 1.0),
+('Canaleta obstruida con agua acumulada', 'https://via.placeholder.com/400x300/7c3aed/ffffff?text=Criadero+5', -27.3750, -55.8700, 'MEDIA', 0.6)
 ON CONFLICT DO NOTHING;
 
 -- 6. Enable realtime for reports table
@@ -49,6 +51,8 @@ SELECT
     description,
     latitude,
     longitude,
+    initial_criticality,
+    criticality_weight,
     CASE
         WHEN photo_url LIKE 'https://via.placeholder.com%' THEN 'Sample Data'
         ELSE 'Real Data'

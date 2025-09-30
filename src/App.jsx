@@ -1,13 +1,20 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
-import { Icon } from 'leaflet';
-import { createClient } from '@supabase/supabase-js';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import React, { useState, useEffect, useRef } from "react";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useMapEvents,
+} from "react-leaflet";
+import { Icon } from "leaflet";
+import { createClient } from "@supabase/supabase-js";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import "leaflet.heat";
 
 // Fix Leaflet default markers
-import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
-import markerIcon from 'leaflet/dist/images/marker-icon.png';
-import markerShadow from 'leaflet/dist/images/marker-shadow.png';
+import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
 delete Icon.Default.prototype._getIconUrl;
 Icon.Default.mergeOptions({
@@ -27,7 +34,7 @@ const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 // Custom marker icon for Aedes reports
 const aedesIcon = new Icon({
-  iconUrl: 'https://cdn-icons-png.flaticon.com/32/2913/2913095.png',
+  iconUrl: "https://cdn-icons-png.flaticon.com/32/2913/2913095.png",
   iconSize: [32, 32],
   iconAnchor: [16, 32],
   popupAnchor: [0, -32],
@@ -36,27 +43,123 @@ const aedesIcon = new Icon({
 // Coordenadas predeterminadas de Posadas, Misiones
 const POSADAS_COORDS = {
   latitude: -27.3671,
-  longitude: -55.8961
+  longitude: -55.8961,
 };
 
 // Zonas de Posadas - Lista completa para selección del usuario
 const POSADAS_ZONES = [
-  { id: 1, name: "Centro", lat: -27.3671, lng: -55.8961, description: "Centro histórico y comercial" },
-  { id: 2, name: "Villa Cabello", lat: -27.3580, lng: -55.9020, description: "Zona residencial norte" },
-  { id: 3, name: "Itaembé Miní", lat: -27.3450, lng: -55.8850, description: "Barrio costero" },
-  { id: 4, name: "Villa Urquiza", lat: -27.3750, lng: -55.8700, description: "Zona sur residencial" },
-  { id: 5, name: "San José", lat: -27.3900, lng: -55.8900, description: "Barrio obrero" },
-  { id: 6, name: "Nemesio Parma", lat: -27.3800, lng: -55.9100, description: "Zona oeste" },
-  { id: 7, name: "Villa Sarita", lat: -27.3600, lng: -55.8800, description: "Barrio residencial" },
-  { id: 8, name: "Bajada Vieja", lat: -27.3650, lng: -55.8950, description: "Zona histórica portuaria" },
-  { id: 9, name: "Villa Blosset", lat: -27.3520, lng: -55.8750, description: "Barrio residencial norte" },
-  { id: 10, name: "San Roque", lat: -27.3820, lng: -55.8650, description: "Zona sur-este" },
-  { id: 11, name: "Villa Lanús", lat: -27.3480, lng: -55.9150, description: "Barrio periférico" },
-  { id: 12, name: "El Porvenir", lat: -27.3950, lng: -55.8750, description: "Zona industrial" },
-  { id: 13, name: "Villa Lourdes", lat: -27.3350, lng: -55.8900, description: "Barrio norte" },
-  { id: 14, name: "Yacyretá", lat: -27.4000, lng: -55.8800, description: "Zona de la represa" },
-  { id: 15, name: "Villa Alberti", lat: -27.3700, lng: -55.9200, description: "Barrio oeste" },
-  { id: 99, name: "Otros", lat: -27.3671, lng: -55.8961, description: "Otra ubicación - marcar en el mapa" }
+  {
+    id: 1,
+    name: "Centro",
+    lat: -27.3671,
+    lng: -55.8961,
+    description: "Centro histórico y comercial",
+  },
+  {
+    id: 2,
+    name: "Villa Cabello",
+    lat: -27.358,
+    lng: -55.902,
+    description: "Zona residencial norte",
+  },
+  {
+    id: 3,
+    name: "Itaembé Miní",
+    lat: -27.345,
+    lng: -55.885,
+    description: "Barrio costero",
+  },
+  {
+    id: 4,
+    name: "Villa Urquiza",
+    lat: -27.375,
+    lng: -55.87,
+    description: "Zona sur residencial",
+  },
+  {
+    id: 5,
+    name: "San José",
+    lat: -27.39,
+    lng: -55.89,
+    description: "Barrio obrero",
+  },
+  {
+    id: 6,
+    name: "Nemesio Parma",
+    lat: -27.38,
+    lng: -55.91,
+    description: "Zona oeste",
+  },
+  {
+    id: 7,
+    name: "Villa Sarita",
+    lat: -27.36,
+    lng: -55.88,
+    description: "Barrio residencial",
+  },
+  {
+    id: 8,
+    name: "Bajada Vieja",
+    lat: -27.365,
+    lng: -55.895,
+    description: "Zona histórica portuaria",
+  },
+  {
+    id: 9,
+    name: "Villa Blosset",
+    lat: -27.352,
+    lng: -55.875,
+    description: "Barrio residencial norte",
+  },
+  {
+    id: 10,
+    name: "San Roque",
+    lat: -27.382,
+    lng: -55.865,
+    description: "Zona sur-este",
+  },
+  {
+    id: 11,
+    name: "Villa Lanús",
+    lat: -27.348,
+    lng: -55.915,
+    description: "Barrio periférico",
+  },
+  {
+    id: 12,
+    name: "El Porvenir",
+    lat: -27.395,
+    lng: -55.875,
+    description: "Zona industrial",
+  },
+  {
+    id: 13,
+    name: "Villa Lourdes",
+    lat: -27.335,
+    lng: -55.89,
+    description: "Barrio norte",
+  },
+  {
+    id: 14,
+    name: "Yacyretá",
+    lat: -27.4,
+    lng: -55.88,
+    description: "Zona de la represa",
+  },
+  {
+    id: 15,
+    name: "Villa Alberti",
+    lat: -27.37,
+    lng: -55.92,
+    description: "Barrio oeste",
+  },
+  {
+    id: 99,
+    name: "Otros",
+    lat: -27.3671,
+    lng: -55.8961,
+    description: "Otra ubicación - marcar en el mapa",
+  },
 ];
 
 // Component for handling map clicks
@@ -65,24 +168,30 @@ const LocationSelector = ({ onLocationSelect, selectedLocation }) => {
     click(e) {
       const { lat, lng } = e.latlng;
       onLocationSelect({ latitude: lat, longitude: lng });
-    }
+    },
   });
 
   return selectedLocation ? (
     <Marker
       position={[selectedLocation.latitude, selectedLocation.longitude]}
-      icon={new Icon({
-        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
-        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41]
-      })}
+      icon={
+        new Icon({
+          iconUrl:
+            "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
+          shadowUrl:
+            "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+          shadowSize: [41, 41],
+        })
+      }
     >
       <Popup>
-        📍 Ubicación seleccionada<br/>
-        Lat: {selectedLocation.latitude.toFixed(6)}<br/>
+        📍 Ubicación seleccionada
+        <br />
+        Lat: {selectedLocation.latitude.toFixed(6)}
+        <br />
         Lng: {selectedLocation.longitude.toFixed(6)}
       </Popup>
     </Marker>
@@ -100,12 +209,17 @@ const Header = () => {
             alt="Logo Vigilantes del Aedes"
             className="w-12 h-12 rounded-lg shadow-md"
             onError={(e) => {
-              e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iOCIgZmlsbD0iIzE0YjhhNiIvPgo8cGF0aCBkPSJNMjQgMTJjNi42MjcgMCAxMiA1LjM3MyAxMiAxMnMtNS4zNzMgMTItMTIgMTItMTItNS4zNzMtMTItMTIgNS4zNzMtMTIgMTItMTJ6bTAtMmMtNy43MzIgMC0xNCA2LjI2OC0xNCAxNHM2LjI2OCAxNCAxNCAxNCAxNC02LjI2OCAxNC0xNC02LjI2OC0xNC0xNC0xNHoiIGZpbGw9IndoaXRlIi8+CjxjaXJjbGUgY3g9IjI0IiBjeT0iMjQiIHI9IjQiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=';
+              e.target.src =
+                "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iOCIgZmlsbD0iIzE0YjhhNiIvPgo8cGF0aCBkPSJNMjQgMTJjNi42MjcgMCAxMiA1LjM3MyAxMiAxMnMtNS4zNzMgMTItMTIgMTItMTItNS4zNzMtMTItMTIgNS4zNzMtMTIgMTItMTJ6bTAtMmMtNy43MzIgMC0xNCA2LjI2OC0xNCAxNHM2LjI2OCAxNCAxNCAxNCAxNC02LjI2OCAxNC0xNC02LjI2OC0xNC0xNC0xNHoiIGZpbGw9IndoaXRlIi8+CjxjaXJjbGUgY3g9IjI0IiBjeT0iMjQiIHI9IjQiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=";
             }}
           />
           <div className="text-center">
-            <h1 className="text-2xl font-bold text-teal-800">Vigilantes del Aedes</h1>
-            <p className="text-sm text-gray-600 font-medium">La red ciudadana que protege a Posadas</p>
+            <h1 className="text-2xl font-bold text-teal-800">
+              Vigilantes del Aedes
+            </h1>
+            <p className="text-sm text-gray-600 font-medium">
+              La red ciudadana que protege a Posadas
+            </p>
           </div>
         </div>
       </div>
@@ -117,24 +231,30 @@ const Header = () => {
 const InfoModal = ({ isOpen, onClose, type, title, message }) => {
   if (!isOpen) return null;
 
-  const isSuccess = type === 'success';
-  const iconClass = isSuccess ? 'text-green-500' : 'text-red-500';
-  const bgClass = isSuccess ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200';
+  const isSuccess = type === "success";
+  const iconClass = isSuccess ? "text-green-500" : "text-red-500";
+  const bgClass = isSuccess
+    ? "bg-green-50 border-green-200"
+    : "bg-red-50 border-red-200";
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" onClick={onClose}>
-      <div className={`bg-white rounded-lg shadow-xl max-w-md w-full p-6 transform transition-all duration-300 ${bgClass} border`} onClick={(e) => e.stopPropagation()}>
+    <div
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+      onClick={onClose}
+    >
+      <div
+        className={`bg-white rounded-lg shadow-xl max-w-md w-full p-6 transform transition-all duration-300 ${bgClass} border`}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="flex items-center justify-center mb-4">
           <div className={`text-4xl ${iconClass}`}>
-            {isSuccess ? '✅' : '❌'}
+            {isSuccess ? "✅" : "❌"}
           </div>
         </div>
         <h3 className="text-lg font-semibold text-gray-800 text-center mb-2">
           {title}
         </h3>
-        <p className="text-gray-600 text-center mb-6">
-          {message}
-        </p>
+        <p className="text-gray-600 text-center mb-6">{message}</p>
         <div className="flex justify-center">
           <button
             onClick={onClose}
@@ -152,27 +272,35 @@ const InfoModal = ({ isOpen, onClose, type, title, message }) => {
 const ReportForm = ({ onReportSubmitted }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-  const [description, setDescription] = useState('');
+  const [description, setDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [selectedZone, setSelectedZone] = useState('');
-  const [streetAddress, setStreetAddress] = useState('');
+  const [selectedZone, setSelectedZone] = useState("");
+  const [streetAddress, setStreetAddress] = useState("");
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [isAdjusting, setIsAdjusting] = useState(false);
-  const [criaderoType, setCriaderoType] = useState('');
-  const [proximity, setProximity] = useState('');
-  const [accessInfo, setAccessInfo] = useState('');
-  const [modal, setModal] = useState({ isOpen: false, type: '', title: '', message: '' });
+  const [criaderoType, setCriaderoType] = useState("");
+  const [proximity, setProximity] = useState("");
+  const [accessInfo, setAccessInfo] = useState("");
+  const [criticality, setCriticality] = useState("");
+  const [modal, setModal] = useState({
+    isOpen: false,
+    type: "",
+    title: "",
+    message: "",
+  });
   const fileInputRef = useRef(null);
 
   const handleImageSelect = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      if (file.size > 10 * 1024 * 1024) { // 10MB limit
+      if (file.size > 10 * 1024 * 1024) {
+        // 10MB limit
         setModal({
           isOpen: true,
-          type: 'error',
-          title: 'Archivo muy grande',
-          message: 'La imagen debe pesar menos de 10MB. Por favor, selecciona una imagen más pequeña.'
+          type: "error",
+          title: "Archivo muy grande",
+          message:
+            "La imagen debe pesar menos de 10MB. Por favor, selecciona una imagen más pequeña.",
         });
         return;
       }
@@ -196,12 +324,12 @@ const ReportForm = ({ onReportSubmitted }) => {
 
     setIsAdjusting(true);
     try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' });
+      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
 
       const base64 = await new Promise((resolve) => {
         const reader = new FileReader();
         reader.onload = (e) => {
-          const base64String = e.target.result.split(',')[1];
+          const base64String = e.target.result.split(",")[1];
           resolve(base64String);
         };
         reader.readAsDataURL(file);
@@ -244,14 +372,14 @@ const ReportForm = ({ onReportSubmitted }) => {
             latitude: adjustedLocation.latitude,
             longitude: adjustedLocation.longitude,
             adjusted: true,
-            confidence: adjustedLocation.confidence || 0.8
+            confidence: adjustedLocation.confidence || 0.8,
           });
         }
       } catch (e) {
-        console.log('Could not parse AI response, keeping original location');
+        console.log("Could not parse AI response, keeping original location");
       }
     } catch (error) {
-      console.error('Error adjusting location:', error);
+      console.error("Error adjusting location:", error);
     } finally {
       setIsAdjusting(false);
     }
@@ -260,7 +388,7 @@ const ReportForm = ({ onReportSubmitted }) => {
   const handleLocationSelect = (location) => {
     setSelectedLocation({
       ...location,
-      adjusted: false
+      adjusted: false,
     });
   };
 
@@ -268,7 +396,7 @@ const ReportForm = ({ onReportSubmitted }) => {
     if (selectedLocation) return selectedLocation;
     if (!selectedZone) return POSADAS_COORDS;
 
-    const zone = POSADAS_ZONES.find(z => z.id === parseInt(selectedZone));
+    const zone = POSADAS_ZONES.find((z) => z.id === parseInt(selectedZone));
     return zone ? { latitude: zone.lat, longitude: zone.lng } : POSADAS_COORDS;
   };
 
@@ -276,16 +404,14 @@ const ReportForm = ({ onReportSubmitted }) => {
     const fileName = `public/${Date.now()}-${file.name}`;
 
     const { error: uploadError } = await supabase.storage
-      .from('Reports')
+      .from("Reports")
       .upload(fileName, file);
 
     if (uploadError) {
-      throw new Error('Error al subir la imagen: ' + uploadError.message);
+      throw new Error("Error al subir la imagen: " + uploadError.message);
     }
 
-    const { data } = supabase.storage
-      .from('Reports')
-      .getPublicUrl(fileName);
+    const { data } = supabase.storage.from("Reports").getPublicUrl(fileName);
 
     return data.publicUrl;
   };
@@ -296,9 +422,9 @@ const ReportForm = ({ onReportSubmitted }) => {
     if (!selectedImage) {
       setModal({
         isOpen: true,
-        type: 'error',
-        title: 'Foto requerida',
-        message: 'Por favor, selecciona una imagen antes de enviar el reporte.'
+        type: "error",
+        title: "Foto requerida",
+        message: "Por favor, selecciona una imagen antes de enviar el reporte.",
       });
       return;
     }
@@ -306,9 +432,10 @@ const ReportForm = ({ onReportSubmitted }) => {
     if (!selectedZone) {
       setModal({
         isOpen: true,
-        type: 'error',
-        title: 'Zona requerida',
-        message: 'Por favor, selecciona la zona donde se encuentra el criadero.'
+        type: "error",
+        title: "Zona requerida",
+        message:
+          "Por favor, selecciona la zona donde se encuentra el criadero.",
       });
       return;
     }
@@ -316,19 +443,32 @@ const ReportForm = ({ onReportSubmitted }) => {
     if (!streetAddress.trim()) {
       setModal({
         isOpen: true,
-        type: 'error',
-        title: 'Dirección requerida',
-        message: 'Por favor, ingresa la dirección específica donde se encuentra el criadero.'
+        type: "error",
+        title: "Dirección requerida",
+        message:
+          "Por favor, ingresa la dirección específica donde se encuentra el criadero.",
       });
       return;
     }
 
-    if (selectedZone === '99' && !selectedLocation) {
+    if (!criticality) {
       setModal({
         isOpen: true,
-        type: 'error',
-        title: 'Ubicación en el mapa requerida',
-        message: 'Como seleccionaste "Otros", por favor marca la ubicación exacta en el mapa haciendo clic donde se encuentra el criadero.'
+        type: "error",
+        title: "Criticidad requerida",
+        message:
+          "Por favor, selecciona el nivel de criticidad del criadero según tu evaluación.",
+      });
+      return;
+    }
+
+    if (selectedZone === "99" && !selectedLocation) {
+      setModal({
+        isOpen: true,
+        type: "error",
+        title: "Ubicación en el mapa requerida",
+        message:
+          'Como seleccionaste "Otros", por favor marca la ubicación exacta en el mapa haciendo clic donde se encuentra el criadero.',
       });
       return;
     }
@@ -341,64 +481,86 @@ const ReportForm = ({ onReportSubmitted }) => {
 
       // Get coordinates from selected zone or map selection
       const location = getSelectedZoneCoordinates();
-      const selectedZoneData = POSADAS_ZONES.find(z => z.id === parseInt(selectedZone));
+      const selectedZoneData = POSADAS_ZONES.find(
+        (z) => z.id === parseInt(selectedZone),
+      );
 
       // Build comprehensive description
       let fullDescription = `${streetAddress.trim()} - ${selectedZoneData.name}`;
       if (criaderoType) fullDescription += ` | Tipo: ${criaderoType}`;
       if (proximity) fullDescription += ` | Cerca de: ${proximity}`;
       if (accessInfo) fullDescription += ` | Acceso: ${accessInfo}`;
-      if (description.trim()) fullDescription += ` | Obs: ${description.trim()}`;
-      if (location.adjusted) fullDescription += ` | Ubicación ajustada por IA (${Math.round(location.confidence * 100)}% confianza)`;
+      if (description.trim())
+        fullDescription += ` | Obs: ${description.trim()}`;
+      if (location.adjusted)
+        fullDescription += ` | Ubicación ajustada por IA (${Math.round(location.confidence * 100)}% confianza)`;
+
+      // Get criticality weight
+      const getCriticalityWeight = (level) => {
+        switch (level) {
+          case "BAJA":
+            return 0.3;
+          case "MEDIA":
+            return 0.6;
+          case "ALTA":
+            return 0.9;
+          case "CRITICA":
+            return 1.0;
+          default:
+            return 0.3;
+        }
+      };
 
       // Insert report into Supabase database
-      const { error } = await supabase
-        .from('reports')
-        .insert({
-          description: fullDescription,
-          photo_url: photoUrl,
-          latitude: location.latitude,
-          longitude: location.longitude
-        });
+      const { error } = await supabase.from("reports").insert({
+        description: fullDescription,
+        photo_url: photoUrl,
+        latitude: location.latitude,
+        longitude: location.longitude,
+        initial_criticality: criticality,
+        criticality_weight: getCriticalityWeight(criticality),
+      });
 
       if (error) {
-        throw new Error('Error al guardar el reporte: ' + error.message);
+        throw new Error("Error al guardar el reporte: " + error.message);
       }
 
       // Show success modal
       setModal({
         isOpen: true,
-        type: 'success',
-        title: '¡Reporte enviado!',
-        message: `¡Excelente! Tu reporte en ${selectedZoneData.name} ha sido enviado correctamente. Los equipos de control sabrán exactamente dónde ir. Has sumado 10 puntos por proteger Posadas del Aedes aegypti.`
+        type: "success",
+        title: "¡Reporte enviado!",
+        message: `¡Excelente! Tu reporte en ${selectedZoneData.name} ha sido enviado correctamente. Los equipos de control sabrán exactamente dónde ir. Has sumado 10 puntos por proteger Posadas del Aedes aegypti.`,
       });
 
       // Reset form
       setSelectedImage(null);
       setImagePreview(null);
-      setDescription('');
-      setSelectedZone('');
-      setStreetAddress('');
+      setDescription("");
+      setSelectedZone("");
+      setStreetAddress("");
       setSelectedLocation(null);
-      setCriaderoType('');
-      setProximity('');
-      setAccessInfo('');
+      setCriaderoType("");
+      setProximity("");
+      setAccessInfo("");
+      setCriticality("");
       if (fileInputRef.current) {
-        fileInputRef.current.value = '';
+        fileInputRef.current.value = "";
       }
 
       // Notify parent component
       if (onReportSubmitted) {
         onReportSubmitted();
       }
-
     } catch (error) {
-      console.error('Error submitting report:', error);
+      console.error("Error submitting report:", error);
       setModal({
         isOpen: true,
-        type: 'error',
-        title: 'Error al enviar',
-        message: error.message || 'Ocurrió un error al enviar tu reporte. Por favor, verifica tu conexión e inténtalo nuevamente.'
+        type: "error",
+        title: "Error al enviar",
+        message:
+          error.message ||
+          "Ocurrió un error al enviar tu reporte. Por favor, verifica tu conexión e inténtalo nuevamente.",
       });
     } finally {
       setIsSubmitting(false);
@@ -408,15 +570,16 @@ const ReportForm = ({ onReportSubmitted }) => {
   const resetForm = () => {
     setSelectedImage(null);
     setImagePreview(null);
-    setDescription('');
-    setSelectedZone('');
-    setStreetAddress('');
+    setDescription("");
+    setSelectedZone("");
+    setStreetAddress("");
     setSelectedLocation(null);
-    setCriaderoType('');
-    setProximity('');
-    setAccessInfo('');
+    setCriaderoType("");
+    setProximity("");
+    setAccessInfo("");
+    setCriticality("");
     if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+      fileInputRef.current.value = "";
     }
   };
 
@@ -451,7 +614,11 @@ const ReportForm = ({ onReportSubmitted }) => {
               disabled={isSubmitting || isAdjusting}
             >
               <span className="text-2xl">📸</span>
-              <span>{isAdjusting ? 'Ajustando ubicación con IA...' : 'Tomar o Subir Foto'}</span>
+              <span>
+                {isAdjusting
+                  ? "Ajustando ubicación con IA..."
+                  : "Tomar o Subir Foto"}
+              </span>
             </button>
 
             {/* Image Preview */}
@@ -482,7 +649,8 @@ const ReportForm = ({ onReportSubmitted }) => {
 
                 {selectedLocation?.adjusted && (
                   <div className="absolute bottom-2 left-2 bg-green-500 text-white px-2 py-1 rounded text-xs">
-                    🤖 Ubicación ajustada por IA ({Math.round(selectedLocation.confidence * 100)}%)
+                    🤖 Ubicación ajustada por IA (
+                    {Math.round(selectedLocation.confidence * 100)}%)
                   </div>
                 )}
               </div>
@@ -516,7 +684,9 @@ const ReportForm = ({ onReportSubmitted }) => {
               Haz clic en el mapa para marcar la ubicación exacta del criadero
               {selectedLocation && (
                 <span className="text-green-600 font-medium">
-                  {selectedLocation.adjusted ? ' | 🤖 Ajustado por IA' : ' | 📍 Marcado manualmente'}
+                  {selectedLocation.adjusted
+                    ? " | 🤖 Ajustado por IA"
+                    : " | 📍 Marcado manualmente"}
                 </span>
               )}
             </p>
@@ -524,7 +694,10 @@ const ReportForm = ({ onReportSubmitted }) => {
 
           {/* Zone Selection */}
           <div>
-            <label htmlFor="zone" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="zone"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Zona donde se encuentra el criadero *
             </label>
             <select
@@ -536,22 +709,26 @@ const ReportForm = ({ onReportSubmitted }) => {
               required
             >
               <option value="">Seleccionar zona de Posadas</option>
-              {POSADAS_ZONES.map(zone => (
+              {POSADAS_ZONES.map((zone) => (
                 <option key={zone.id} value={zone.id}>
                   {zone.name} - {zone.description}
                 </option>
               ))}
             </select>
-            {selectedZone === '99' && (
+            {selectedZone === "99" && (
               <p className="text-xs text-amber-600 mt-1">
-                ⚠️ Has seleccionado "Otros". Por favor marca la ubicación exacta en el mapa de arriba.
+                ⚠️ Has seleccionado "Otros". Por favor marca la ubicación exacta
+                en el mapa de arriba.
               </p>
             )}
           </div>
 
           {/* Street Address Section */}
           <div>
-            <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="address"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Dirección específica *
             </label>
             <input
@@ -568,7 +745,10 @@ const ReportForm = ({ onReportSubmitted }) => {
 
           {/* Tipo de Criadero */}
           <div>
-            <label htmlFor="criaderoType" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="criaderoType"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Tipo de criadero
             </label>
             <select
@@ -579,7 +759,9 @@ const ReportForm = ({ onReportSubmitted }) => {
               disabled={isSubmitting}
             >
               <option value="">Seleccionar tipo</option>
-              <option value="Balde/Recipiente">Balde o recipiente de agua</option>
+              <option value="Balde/Recipiente">
+                Balde o recipiente de agua
+              </option>
               <option value="Neumático">Neumático abandonado</option>
               <option value="Maceta">Maceta o jardinera</option>
               <option value="Canaleta">Canaleta obstruida</option>
@@ -592,7 +774,10 @@ const ReportForm = ({ onReportSubmitted }) => {
 
           {/* Proximidad */}
           <div>
-            <label htmlFor="proximity" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="proximity"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               ¿Cerca de qué está ubicado?
             </label>
             <input
@@ -608,7 +793,10 @@ const ReportForm = ({ onReportSubmitted }) => {
 
           {/* Información de acceso */}
           <div>
-            <label htmlFor="accessInfo" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="accessInfo"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               ¿Cómo acceder al lugar?
             </label>
             <select
@@ -620,17 +808,58 @@ const ReportForm = ({ onReportSubmitted }) => {
             >
               <option value="">Seleccionar acceso</option>
               <option value="Acceso libre">Acceso libre desde la calle</option>
-              <option value="Patio privado">En patio privado - pedir permiso</option>
+              <option value="Patio privado">
+                En patio privado - pedir permiso
+              </option>
               <option value="Terreno baldío">En terreno baldío</option>
               <option value="Zona comercial">En zona comercial</option>
-              <option value="Escuela/Institución">En escuela o institución</option>
-              <option value="Difícil acceso">Difícil acceso - requiere coordinación</option>
+              <option value="Escuela/Institución">
+                En escuela o institución
+              </option>
+              <option value="Difícil acceso">
+                Difícil acceso - requiere coordinación
+              </option>
             </select>
+          </div>
+
+          {/* Criticidad Section */}
+          <div>
+            <label
+              htmlFor="criticality"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
+              Nivel de criticidad del criadero *
+            </label>
+            <select
+              id="criticality"
+              value={criticality}
+              onChange={(e) => setCriticality(e.target.value)}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm"
+              disabled={isSubmitting}
+              required
+            >
+              <option value="">Seleccionar nivel de criticidad</option>
+              <option value="BAJA">
+                🟢 BAJA - Criadero pequeño o controlable
+              </option>
+              <option value="MEDIA">🟡 MEDIA - Criadero de tamaño medio</option>
+              <option value="ALTA">🟠 ALTA - Criadero grande o múltiple</option>
+              <option value="CRITICA">
+                🔴 CRÍTICA - Situación de emergencia
+              </option>
+            </select>
+            <p className="text-xs text-gray-500 mt-1">
+              Evalúa el nivel de riesgo según el tamaño del criadero, cantidad
+              de agua, accesibilidad para mosquitos, etc.
+            </p>
           </div>
 
           {/* Additional Description Section */}
           <div>
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="description"
+              className="block text-sm font-medium text-gray-700 mb-2"
+            >
               Descripción del criadero (opcional)
             </label>
             <textarea
@@ -650,8 +879,16 @@ const ReportForm = ({ onReportSubmitted }) => {
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={!selectedImage || !selectedZone || !streetAddress.trim() || isSubmitting || isAdjusting || (selectedZone === '99' && !selectedLocation)}
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 text-lg py-4"
+            disabled={
+              !selectedImage ||
+              !selectedZone ||
+              !streetAddress.trim() ||
+              !criticality ||
+              isSubmitting ||
+              isAdjusting ||
+              (selectedZone === "99" && !selectedLocation)
+            }
+            className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 text-lg"
           >
             {isSubmitting ? (
               <>
@@ -670,10 +907,14 @@ const ReportForm = ({ onReportSubmitted }) => {
         {/* Help Text */}
         <div className="mt-4 p-3 bg-teal-50 rounded-lg border border-teal-200">
           <p className="text-sm text-teal-700">
-            <strong>💡 Instrucciones:</strong><br/>
-            1. Sube una foto clara del criadero<br/>
-            2. Selecciona la zona o marca "Otros" para ubicación personalizada<br/>
-            3. Haz clic en el mapa para marcar la ubicación exacta<br/>
+            <strong>💡 Instrucciones:</strong>
+            <br />
+            1. Sube una foto clara del criadero
+            <br />
+            2. Selecciona la zona o marca "Otros" para ubicación personalizada
+            <br />
+            3. Haz clic en el mapa para marcar la ubicación exacta
+            <br />
             4. La IA ajustará automáticamente la ubicación para máxima precisión
           </p>
         </div>
@@ -691,25 +932,235 @@ const ReportForm = ({ onReportSubmitted }) => {
 };
 
 // MapComponent
+// Componente para el mapa de calor
+const HeatmapLayer = ({ reports }) => {
+  const map = useMapEvents({});
+
+  useEffect(() => {
+    if (!window.L.heatLayer || !reports.length) return;
+
+    // Calcular criticidad evolutiva basada en criticidad inicial + días transcurridos
+    const calculateEvolutiveCriticality = (report) => {
+      const now = new Date();
+      const reportDate = new Date(report.created_at);
+      const daysDiff = Math.floor((now - reportDate) / (1000 * 60 * 60 * 24));
+
+      // Usar la criticidad inicial del reporte o calcular por defecto
+      let baseWeight = report.criticality_weight || 0.3;
+
+      // Si no tiene criticidad inicial guardada, usar la inicial marcada por el usuario
+      if (!report.criticality_weight && report.initial_criticality) {
+        switch (report.initial_criticality) {
+          case "BAJA":
+            baseWeight = 0.3;
+            break;
+          case "MEDIA":
+            baseWeight = 0.6;
+            break;
+          case "ALTA":
+            baseWeight = 0.9;
+            break;
+          case "CRITICA":
+            baseWeight = 1.0;
+            break;
+          default:
+            baseWeight = 0.3;
+        }
+      }
+
+      // Incrementar criticidad con el tiempo (0.05 por cada 3 días)
+      const timeIncrement = Math.floor(daysDiff / 3) * 0.05;
+      const finalWeight = Math.min(baseWeight + timeIncrement, 1.0);
+
+      return finalWeight;
+    };
+
+    // Generar datos para el heatmap [lat, lng, intensity]
+    const heatmapData = reports.map((report) => [
+      report.latitude,
+      report.longitude,
+      calculateEvolutiveCriticality(report),
+    ]);
+
+    // Crear capa de heatmap
+    const heatmapLayer = window.L.heatLayer(heatmapData, {
+      radius: 25,
+      blur: 15,
+      maxZoom: 17,
+      gradient: {
+        0.0: "#00ff00", // Verde para reportes nuevos (menos críticos)
+        0.3: "#ffff00", // Amarillo
+        0.6: "#ff8000", // Naranja
+        0.9: "#ff4000", // Rojo
+        1.0: "#ff0000", // Rojo intenso para reportes críticos
+      },
+    });
+
+    heatmapLayer.addTo(map);
+
+    // Cleanup
+    return () => {
+      if (map.hasLayer(heatmapLayer)) {
+        map.removeLayer(heatmapLayer);
+      }
+    };
+  }, [map, reports]);
+
+  return null;
+};
+
 const MapComponent = ({ reports }) => {
+  const [showHeatmap, setShowHeatmap] = useState(true);
+  const [showMarkers, setShowMarkers] = useState(true);
+
   const formatDate = (timestamp) => {
-    if (!timestamp) return 'Fecha no disponible';
+    if (!timestamp) return "Fecha no disponible";
 
     const date = new Date(timestamp);
-    return date.toLocaleDateString('es-AR', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return date.toLocaleDateString("es-AR", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
+  };
+
+  const calculateEvolutiveCriticality = (report) => {
+    const now = new Date();
+    const reportDate = new Date(report.created_at);
+    const daysDiff = Math.floor((now - reportDate) / (1000 * 60 * 60 * 24));
+
+    // Usar la criticidad inicial del reporte o calcular por defecto
+    let baseWeight = report.criticality_weight || 0.3;
+
+    // Si no tiene criticidad inicial guardada, usar la inicial marcada por el usuario
+    if (!report.criticality_weight && report.initial_criticality) {
+      switch (report.initial_criticality) {
+        case "BAJA":
+          baseWeight = 0.3;
+          break;
+        case "MEDIA":
+          baseWeight = 0.6;
+          break;
+        case "ALTA":
+          baseWeight = 0.9;
+          break;
+        case "CRITICA":
+          baseWeight = 1.0;
+          break;
+        default:
+          baseWeight = 0.3;
+      }
+    }
+
+    // Incrementar criticidad con el tiempo (0.05 por cada 3 días)
+    const timeIncrement = Math.floor(daysDiff / 3) * 0.05;
+    const finalWeight = Math.min(baseWeight + timeIncrement, 1.0);
+
+    return finalWeight;
+  };
+
+  const getCriticalityLevel = (report) => {
+    const weight = calculateEvolutiveCriticality(report);
+    const initialLevel = report.initial_criticality || "BAJA";
+
+    if (weight <= 0.4)
+      return {
+        level: "BAJA",
+        initialLevel: initialLevel,
+        color: "bg-green-100 text-green-800",
+        emoji: "🟢",
+      };
+    if (weight <= 0.65)
+      return {
+        level: "MEDIA",
+        initialLevel: initialLevel,
+        color: "bg-yellow-100 text-yellow-800",
+        emoji: "🟡",
+      };
+    if (weight <= 0.85)
+      return {
+        level: "ALTA",
+        initialLevel: initialLevel,
+        color: "bg-orange-100 text-orange-800",
+        emoji: "🟠",
+      };
+    return {
+      level: "CRÍTICA",
+      initialLevel: initialLevel,
+      color: "bg-red-100 text-red-800",
+      emoji: "🔴",
+    };
   };
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-8 border border-gray-200">
-      <h2 className="text-xl font-semibold text-gray-800 mb-4">
-        Mapa de Reportes en Tiempo Real
-      </h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold text-gray-800">
+          Mapa de Reportes - Análisis de Criticidad Temporal
+        </h2>
+
+        {/* Controles de toggle */}
+        <div className="flex gap-4">
+          <button
+            onClick={() => setShowHeatmap(!showHeatmap)}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              showHeatmap
+                ? "bg-red-100 text-red-800 border border-red-300"
+                : "bg-gray-100 text-gray-600 border border-gray-300"
+            }`}
+          >
+            {showHeatmap
+              ? "🔥 Ocultar Mapa de Calor"
+              : "🔥 Mostrar Mapa de Calor"}
+          </button>
+
+          <button
+            onClick={() => setShowMarkers(!showMarkers)}
+            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              showMarkers
+                ? "bg-blue-100 text-blue-800 border border-blue-300"
+                : "bg-gray-100 text-gray-600 border border-gray-300"
+            }`}
+          >
+            {showMarkers ? "📍 Ocultar Marcadores" : "📍 Mostrar Marcadores"}
+          </button>
+        </div>
+      </div>
+
+      {/* Leyenda de criticidad */}
+      <div className="mb-4 p-4 bg-gray-50 rounded-lg">
+        <h3 className="text-sm font-semibold text-gray-700 mb-2">
+          Niveles de Criticidad Temporal:
+        </h3>
+        <div className="flex flex-wrap gap-4 text-xs">
+          <div className="flex items-center gap-2">
+            <span>🟢</span>
+            <span className="px-2 py-1 bg-green-100 text-green-800 rounded">
+              BAJA (inicial + tiempo)
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span>🟡</span>
+            <span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded">
+              MEDIA (inicial + tiempo)
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span>🟠</span>
+            <span className="px-2 py-1 bg-orange-100 text-orange-800 rounded">
+              ALTA (inicial + tiempo)
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span>🔴</span>
+            <span className="px-2 py-1 bg-red-100 text-red-800 rounded">
+              CRÍTICA (inicial + tiempo)
+            </span>
+          </div>
+        </div>
+      </div>
 
       <div className="h-[600px] w-full rounded-lg overflow-hidden border-2 border-gray-300">
         <MapContainer
@@ -722,55 +1173,110 @@ const MapComponent = ({ reports }) => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
 
-          {reports.map((report) => (
-            <Marker
-              key={report.id}
-              position={[report.latitude, report.longitude]}
-              icon={aedesIcon}
-            >
-              <Popup maxWidth={250}>
-                <div className="text-center">
-                  <img
-                    src={report.photo_url}
-                    alt="Reporte de criadero"
-                    className="w-full h-32 object-cover rounded mb-2"
-                    onError={(e) => {
-                      e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjEyOCIgdmlld0JveD0iMCAwIDIwMCAxMjgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMTI4IiBmaWxsPSIjZjNmNGY2Ii8+CjxwYXRoIGQ9Im04MCA2NGMwLTguODM3IDcuMTYzLTE2IDE2LTE2czE2IDcuMTYzIDE2IDE2LTcuMTYzIDE2LTE2IDE2LTE2LTcuMTYzLTE2LTE2em0zMi00djE2aDEydjRoLTQ0di00aDEydi0xNmg0djEyaDEydi04aDR6IiBmaWxsPSIjOWNhM2FmIi8+Cjx0ZXh0IHg9IjEwMCIgeT0iOTAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM5Y2EzYWYiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiI+SW1hZ2VuIG5vIGRpc3BvbmlibGU8L3RleHQ+Cjwvc3ZnPgo=';
-                    }}
-                  />
+          {/* Capa de mapa de calor */}
+          {showHeatmap && <HeatmapLayer reports={reports} />}
 
-                  {report.description && (
-                    <p className="text-sm text-gray-700 mb-2">
-                      {report.description}
-                    </p>
-                  )}
+          {/* Marcadores individuales */}
+          {showMarkers &&
+            reports.map((report) => {
+              const criticality = getCriticalityLevel(report);
 
-                  <p className="text-xs text-gray-500">
-                    📅 {formatDate(report.created_at)}
-                  </p>
+              return (
+                <Marker
+                  key={report.id}
+                  position={[report.latitude, report.longitude]}
+                  icon={aedesIcon}
+                >
+                  <Popup maxWidth={250}>
+                    <div className="text-center">
+                      <img
+                        src={report.photo_url}
+                        alt="Reporte de criadero"
+                        className="w-full h-32 object-cover rounded mb-2"
+                        onError={(e) => {
+                          e.target.src =
+                            "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjEyOCIgdmlld0JveD0iMCAwIDIwMCAxMjgiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMTI4IiBmaWxsPSIjZjNmNGY2Ii8+CjxwYXRoIGQ9Im04MCA2NGMwLTguODM3IDcuMTYzLTE2IDE2LTE2czE2IDcuMTYzIDE2IDE2LTcuMTYzIDE2LTE2IDE2LTE2LTcuMTYzLTE2LTE2em0zMi00djE2aDEydjRoLTQ0di00aDEydi0xNmg0djEyaDEydi04aDR6IiBmaWxsPSIjOWNhM2FmIi8+Cjx0ZXh0IHg9IjEwMCIgeT0iOTAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM5Y2EzYWYiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiI+SW1hZ2VuIG5vIGRpc3BvbmlibGU8L3RleHQ+Cjwvc3ZnPgo=";
+                        }}
+                      />
 
-                  <div className="mt-2 p-2 bg-orange-100 rounded text-xs text-orange-800">
-                    <strong>⚠️ Zona de Alerta</strong>
-                    <br />
-                    Posible criadero de Aedes aegypti
-                  </div>
-                </div>
-              </Popup>
-            </Marker>
-          ))}
+                      {report.description && (
+                        <p className="text-sm text-gray-700 mb-2">
+                          {report.description}
+                        </p>
+                      )}
+
+                      <p className="text-xs text-gray-500 mb-2">
+                        📅 {formatDate(report.created_at)}
+                      </p>
+
+                      {/* Indicador de criticidad */}
+                      <div
+                        className={`mb-2 p-2 rounded text-xs ${criticality.color}`}
+                      >
+                        <strong>
+                          {criticality.emoji} Criticidad {criticality.level}
+                        </strong>
+                        <br />
+                        <span className="text-xs">
+                          Inicial: {criticality.initialLevel} → Actual:{" "}
+                          {criticality.level}
+                        </span>
+                      </div>
+
+                      <div className="mt-2 p-2 bg-orange-100 rounded text-xs text-orange-800">
+                        <strong>⚠️ Zona de Alerta</strong>
+                        <br />
+                        Posible criadero de Aedes aegypti
+                      </div>
+                    </div>
+                  </Popup>
+                </Marker>
+              );
+            })}
         </MapContainer>
       </div>
 
-      {/* Reports Counter */}
-      <div className="mt-6 bg-gray-50 rounded-lg p-4 flex justify-between items-center text-sm text-gray-700">
-        <span className="flex items-center space-x-2">
-          <span>📍</span>
-          <span><strong>{reports.length}</strong> reportes activos</span>
-        </span>
-        <span className="flex items-center space-x-2">
-          <span>🏆</span>
-          <span><strong>{reports.length * 10}</strong> puntos generados por la comunidad</span>
-        </span>
+      {/* Estadísticas mejoradas */}
+      <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-700">
+          <div className="flex items-center justify-between">
+            <span className="flex items-center space-x-2">
+              <span>📍</span>
+              <span>
+                <strong>{reports.length}</strong> reportes activos
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-700">
+          <div className="flex items-center justify-between">
+            <span className="flex items-center space-x-2">
+              <span>🔥</span>
+              <span>
+                <strong>
+                  {
+                    reports.filter(
+                      (r) => getCriticalityLevel(r).level === "CRÍTICA",
+                    ).length
+                  }
+                </strong>{" "}
+                reportes críticos
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <div className="bg-gray-50 rounded-lg p-4 text-sm text-gray-700">
+          <div className="flex items-center justify-between">
+            <span className="flex items-center space-x-2">
+              <span>🏆</span>
+              <span>
+                <strong>{reports.length * 10}</strong> puntos generados
+              </span>
+            </span>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -787,9 +1293,9 @@ const App = () => {
     const fetchReports = async () => {
       try {
         const { data, error } = await supabase
-          .from('reports')
-          .select('*')
-          .order('created_at', { ascending: false });
+          .from("reports")
+          .select("*")
+          .order("created_at", { ascending: false });
 
         if (error) {
           throw error;
@@ -798,8 +1304,10 @@ const App = () => {
         setReports(data || []);
         setLoading(false);
       } catch (err) {
-        console.error('Error fetching reports:', err);
-        setError('Error al cargar los reportes. Verifica que la tabla "reports" esté creada en Supabase.');
+        console.error("Error fetching reports:", err);
+        setError(
+          'Error al cargar los reportes. Verifica que la tabla "reports" esté creada en Supabase.',
+        );
         setLoading(false);
       }
     };
@@ -808,18 +1316,18 @@ const App = () => {
 
     // Set up real-time subscription for new reports
     const channel = supabase
-      .channel('public:reports')
+      .channel("public:reports")
       .on(
-        'postgres_changes',
+        "postgres_changes",
         {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'reports'
+          event: "INSERT",
+          schema: "public",
+          table: "reports",
         },
         (payload) => {
-          console.log('New report received:', payload.new);
-          setReports(currentReports => [payload.new, ...currentReports]);
-        }
+          console.log("New report received:", payload.new);
+          setReports((currentReports) => [payload.new, ...currentReports]);
+        },
       )
       .subscribe();
 
@@ -831,7 +1339,7 @@ const App = () => {
 
   const handleReportSubmitted = () => {
     // The real-time subscription will automatically update the reports
-    console.log('Report submitted successfully');
+    console.log("Report submitted successfully");
   };
 
   if (loading) {
@@ -839,7 +1347,9 @@ const App = () => {
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-600 mx-auto mb-4"></div>
-          <p className="text-teal-700 font-medium">Cargando Vigilantes del Aedes...</p>
+          <p className="text-teal-700 font-medium">
+            Cargando Vigilantes del Aedes...
+          </p>
         </div>
       </div>
     );
@@ -856,7 +1366,8 @@ const App = () => {
           </p>
           <p className="text-sm mt-1">
             Selecciona la zona exacta de Posadas donde se encuentra el criadero.
-            Los equipos de control recibirán la ubicación precisa para una respuesta rápida y efectiva.
+            Los equipos de control recibirán la ubicación precisa para una
+            respuesta rápida y efectiva.
           </p>
         </div>
 
@@ -864,9 +1375,11 @@ const App = () => {
           <div className="mb-6 p-4 bg-red-100 border border-red-300 text-red-700 rounded-lg">
             <p className="font-medium">⚠️ {error}</p>
             <p className="text-sm mt-1">
-              Asegúrate de haber ejecutado el script setup_supabase.sql en tu proyecto Supabase.
+              Asegúrate de haber ejecutado el script setup_supabase.sql en tu
+              proyecto Supabase.
               <br />
-              Tabla requerida: 'reports' con columnas: id, created_at, description, photo_url, latitude, longitude
+              Tabla requerida: 'reports' con columnas: id, created_at,
+              description, photo_url, latitude, longitude
             </p>
           </div>
         )}
@@ -935,10 +1448,12 @@ const App = () => {
             </p>
           </div>
           <p className="text-sm text-gray-500">
-            Vigilantes del Aedes © 2024 | Protegiendo Posadas del dengue, zika y chikungunya
+            Vigilantes del Aedes © 2024 | Protegiendo Posadas del dengue, zika
+            y chikungunya
           </p>
           <p className="text-xs mt-2 text-gray-400">
-            Desarrollado con Supabase para la salud pública de Misiones, Argentina
+            Desarrollado con Supabase para la salud pública de Misiones,
+            Argentina
           </p>
         </footer>
       </main>
