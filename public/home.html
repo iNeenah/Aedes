@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vigilantes del Aedes - Transformando la lucha contra el dengue</title>
+    <meta name="description" content="Plataforma colaborativa para combatir el dengue en Posadas mediante reportes ciudadanos, gamificación y análisis de datos en tiempo real.">
+    <link rel="icon" href="favicon.ico">
+    <script>
+        // Redirect to landing page immediately
+        window.location.replace('./landing/index.html');
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #00A859 0%, #007A3D 100%);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .loading {
+            text-align: center;
+        }
+        .spinner {
+            border: 4px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top: 4px solid #E6007E;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading">
+        <div class="spinner"></div>
+        <h2>🦟 Vigilantes del Aedes</h2>
+        <p>Cargando página principal...</p>
+        <p><a href="./landing/index.html" style="color: #E6007E;">Haz clic aquí si no se redirige automáticamente</a></p>
+    </div>
+</body>
+</html>

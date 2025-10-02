@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vigilantes del Aedes</title>
+    <link rel="icon" href="favicon.ico">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #00A859 0%, #007A3D 100%);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            max-width: 500px;
+            padding: 2rem;
+        }
+        .logo {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        .title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        .btn {
+            background: linear-gradient(135deg, #E6007E 0%, #c4006c 100%);
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            display: inline-block;
+            margin: 10px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 15px rgba(230, 0, 126, 0.3);
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(230, 0, 126, 0.4);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            box-shadow: none;
+        }
+        .btn-outline:hover {
+            background: white;
+            color: #00A859;
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🦟</div>
+        <h1 class="title">Vigilantes del Aedes</h1>
+        <p class="subtitle">Transformando la lucha contra el dengue en Posadas</p>
+        
+        <div>
+            <a href="./landing/index.html" class="btn">
+                📊 Página Principal
+            </a>
+            <br>
+            <a href="./index.html" class="btn btn-outline">
+                🐛 Reportar Criadero
+            </a>
+        </div>
+        
+        <p style="font-size: 0.9rem; margin-top: 30px; opacity: 0.8;">
+            Selecciona una opción para continuar
+        </p>
+    </div>
+</body>
+</html>

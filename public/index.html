@@ -4,7 +4,7 @@
         <meta charset="utf-8" />
         <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="theme-color" content="#2563eb" />
+        <meta name="theme-color" content="#00A859" />
         <meta
             name="description"
             content="Vigilantes del Aedes - Sistema web para reportar criaderos del mosquito Aedes aegypti en Posadas, Misiones"
@@ -14,10 +14,6 @@
             content="aedes aegypti, dengue, zika, chikungunya, posadas, misiones, salud publica, reportes"
         />
         <meta name="author" content="Vigilantes del Aedes" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0, minimum-scale=1.0"
-        />
         <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
         <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
 
@@ -25,7 +21,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
             rel="stylesheet"
         />
 
@@ -45,18 +41,34 @@
                 style="
                     text-align: center;
                     padding: 50px;
-                    font-family: Arial, sans-serif;
+                    font-family: Inter, sans-serif;
+                    background: linear-gradient(135deg, #00A859 0%, #007A3D 100%);
+                    color: white;
+                    min-height: 100vh;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
                 "
             >
-                <h1>JavaScript Requerido</h1>
-                <p>
-                    Esta aplicación web requiere JavaScript para funcionar
-                    correctamente.
-                </p>
-                <p>
-                    Por favor, habilita JavaScript en tu navegador e inténtalo
-                    nuevamente.
-                </p>
+                <div>
+                    <h1 style="margin-bottom: 20px;">🦟 Vigilantes del Aedes</h1>
+                    <p style="font-size: 1.2rem; margin-bottom: 15px;">
+                        Esta aplicación web requiere JavaScript para funcionar correctamente.
+                    </p>
+                    <p>
+                        Por favor, habilita JavaScript en tu navegador e inténtalo nuevamente.
+                    </p>
+                    <div style="margin-top: 30px;">
+                        <a href="./landing/index.html" style="
+                            background: #E6007E;
+                            color: white;
+                            padding: 12px 30px;
+                            text-decoration: none;
+                            border-radius: 25px;
+                            font-weight: 600;
+                        ">Ver Página de Información</a>
+                    </div>
+                </div>
             </div>
         </noscript>
         <div id="root"></div>

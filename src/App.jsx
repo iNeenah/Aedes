@@ -200,26 +200,50 @@ const LocationSelector = ({ onLocationSelect, selectedLocation }) => {
 
 // Header Component
 const Header = () => {
+  const goToLanding = () => {
+    // Simple navigation to landing page
+    window.location.href = './landing/index.html';
+  };
+
   return (
-    <header className="bg-white shadow-lg border-b-2 border-teal-200">
+    <header style={{
+      background: 'linear-gradient(135deg, #00A859 0%, #007A3D 100%)',
+      boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+      backdropFilter: 'blur(10px)'
+    }}>
       <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-center space-x-4">
-          <img
-            src="https://i.imgur.com/ODp3hZo.png"
-            alt="Logo Vigilantes del Aedes"
-            className="w-12 h-12 rounded-lg shadow-md"
-            onError={(e) => {
-              e.target.src =
-                "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNDgiIHZpZXdCb3g9IjAgMCA0OCA0OCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjQ4IiBoZWlnaHQ9IjQ4IiByeD0iOCIgZmlsbD0iIzE0YjhhNiIvPgo8cGF0aCBkPSJNMjQgMTJjNi42MjcgMCAxMiA1LjM3MyAxMiAxMnMtNS4zNzMgMTItMTIgMTItMTItNS4zNzMtMTItMTIgNS4zNzMtMTIgMTItMTJ6bTAtMmMtNy43MzIgMC0xNCA2LjI2OC0xNCAxNHM2LjI2OCAxNCAxNCAxNCAxNC02LjI2OCAxNC0xNC02LjI2OC0xNC0xNC0xNHoiIGZpbGw9IndoaXRlIi8+CjxjaXJjbGUgY3g9IjI0IiBjeT0iMjQiIHI9IjQiIGZpbGw9IndoaXRlIi8+Cjwvc3ZnPgo=";
-            }}
-          />
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-teal-800">
-              Vigilantes del Aedes
-            </h1>
-            <p className="text-sm text-gray-600 font-medium">
-              La red ciudadana que protege a Posadas
-            </p>
+        <div className="flex items-center justify-between">
+          {/* Logo and Title */}
+          <div className="flex items-center space-x-4">
+            <div 
+              className="w-12 h-12 rounded-lg shadow-md flex items-center justify-center text-2xl cursor-pointer"
+              style={{ background: '#E6007E' }}
+              onClick={goToLanding}
+            >
+              🦟
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold text-white">
+                Vigilantes del Aedes
+              </h1>
+              <p className="text-sm text-white opacity-90 font-medium">
+                Sistema de Reportes Web
+              </p>
+            </div>
+          </div>
+
+          {/* Navigation */}
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={goToLanding}
+              className="text-white hover:text-gray-200 transition-colors duration-200 flex items-center space-x-2 px-4 py-2 rounded-lg hover:bg-white hover:bg-opacity-10"
+            >
+              <span>←</span>
+              <span className="hidden md:inline">Volver al Inicio</span>
+            </button>
+            <div className="text-white text-sm opacity-75 hidden md:block">
+              📍 Reportar Criadero
+            </div>
           </div>
         </div>
       </div>
@@ -258,7 +282,10 @@ const InfoModal = ({ isOpen, onClose, type, title, message }) => {
         <div className="flex justify-center">
           <button
             onClick={onClose}
-            className="bg-teal-600 hover:bg-teal-700 text-white font-medium py-2 px-8 rounded-lg transition-colors duration-200"
+            className="text-white font-medium py-2 px-8 rounded-lg transition-colors duration-200"
+            style={{
+              background: 'linear-gradient(135deg, #00A859 0%, #007A3D 100%)'
+            }}
           >
             Cerrar
           </button>
@@ -610,7 +637,11 @@ const ReportForm = ({ onReportSubmitted }) => {
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+              className="w-full text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2"
+            style={{
+              background: isAdjusting ? '#64748B' : 'linear-gradient(135deg, #E6007E 0%, #c4006c 100%)',
+              boxShadow: '0 4px 15px rgba(230, 0, 126, 0.3)'
+            }}
               disabled={isSubmitting || isAdjusting}
             >
               <span className="text-2xl">📸</span>
@@ -888,7 +919,11 @@ const ReportForm = ({ onReportSubmitted }) => {
               isAdjusting ||
               (selectedZone === "99" && !selectedLocation)
             }
-            className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 text-lg"
+            className="w-full text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center space-x-2 text-lg"
+            style={{
+              background: isSubmitting ? '#64748B' : 'linear-gradient(135deg, #E6007E 0%, #c4006c 100%)',
+              boxShadow: '0 4px 15px rgba(230, 0, 126, 0.3)'
+            }}
           >
             {isSubmitting ? (
               <>

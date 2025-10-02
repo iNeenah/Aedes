@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vigilantes del Aedes - Transformando la lucha contra el dengue</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --verde-principal: #00A859;
+            --verde-secundario: #007A3D;
+            --verde-claro: #4ADE80;
+            --rosa: #E6007E;
+            --rosa-claro: #F472B6;
+            --blanco: #FFFFFF;
+            --gris-claro: #F8FAFC;
+            --gris-medio: #64748B;
+            --gris-oscuro: #1E293B;
+            --azul-accent: #3B82F6;
+            --amarillo-warning: #F59E0B;
+            --rojo-danger: #EF4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--gris-oscuro);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: linear-gradient(135deg, var(--verde-principal) 0%, var(--verde-secundario) 100%);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            color: var(--blanco) !important;
+            font-size: 1.5rem;
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,0.9) !important;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--blanco) !important;
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--rosa) 0%, #c4006c 100%);
+            border: none;
+            font-weight: 600;
+            padding: 12px 30px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(230, 0, 126, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(230, 0, 126, 0.4);
+            background: linear-gradient(135deg, #c4006c 0%, var(--rosa) 100%);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--verde-principal) 0%, var(--verde-secundario) 100%);
+            color: var(--blanco);
+            padding: 120px 0;
+            position: relative;
+            overflow: hidden;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.05" d="M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,192C672,181,768,139,864,138.7C960,139,1056,181,1152,181.3C1248,181,1344,139,1392,117.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat center bottom;
+            background-size: cover;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            background: linear-gradient(135deg, var(--blanco) 0%, rgba(255,255,255,0.8) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.4rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--verde-claro);
+        }
+
+        .hero-stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Stats Cards */
+        .stats-section {
+            padding: 80px 0;
+            background: var(--gris-claro);
+            position: relative;
+            margin-top: -50px;
+            z-index: 3;
+        }
+
+        .stat-card {
+            background: var(--blanco);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+            border-top: 5px solid var(--rosa);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .stat-card:hover::before {
+            left: 100%;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--verde-principal);
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            color: var(--gris-medio);
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .stat-trend {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .trend-up {
+            color: var(--rojo-danger);
+        }
+
+        .trend-down {
+            color: var(--verde-principal);
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--verde-principal);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 80px;
+            height: 5px;
+            background: linear-gradient(135deg, var(--rosa) 0%, var(--rosa-claro) 100%);
+            border-radius: 3px;
+        }
+
+        .section-subtitle {
+            font-size: 1.3rem;
+            color: var(--gris-medio);
+            margin-bottom: 3rem;
+            font-weight: 400;
+        }
+
+        /* Problem Section */
+        .problem-section {
+            padding: 100px 0;
+            background: var(--blanco);
+        }
+
+        .problem-card {
+            background: linear-gradient(135deg, #FEF2F2 0%, #FEE2E2 100%);
+            border-radius: 20px;
+            padding: 40px;
+            border-left: 6px solid var(--rojo-danger);
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(239, 68, 68, 0.1);
+        }
+
+        .problem-icon {
+            font-size: 3rem;
+            color: var(--rojo-danger);
+            margin-bottom: 20px;
+        }
+
+        .problem-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--rojo-danger);
+            margin-bottom: 15px;
+        }
+
+        /* Solution Section */
+        .solution-section {
+            padding: 100px 0;
+            background: var(--gris-claro);
+        }
+
+        .feature-card {
+            background: var(--blanco);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            height: 100%;
+            border-top: 5px solid var(--verde-principal);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            font-size: 4rem;
+            color: var(--verde-principal);
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+            color: var(--verde-claro);
+        }
+
+        .feature-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--verde-principal);
+            margin-bottom: 20px;
+        }
+
+        .feature-description {
+            color: var(--gris-medio);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* Dashboard Section */
+        .dashboard-section {
+            padding: 100px 0;
+            background: var(--blanco);
+        }
+
+        .dashboard-card {
+            background: var(--blanco);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+            height: 100%;
+            border: 2px solid var(--gris-claro);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-card:hover {
+            border-color: var(--verde-principal);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .dashboard-icon {
+            font-size: 4rem;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-card:hover .dashboard-icon {
+            transform: scale(1.1);
+        }
+
+        .chart-placeholder {
+            height: 200px;
+            background: linear-gradient(135deg, var(--gris-claro) 0%, #E2E8F0 100%);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chart-placeholder::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Timeline */
+        .timeline-section {
+            padding: 100px 0;
+            background: var(--gris-claro);
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background: linear-gradient(180deg, var(--verde-principal) 0%, var(--verde-secundario) 100%);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            padding: 20px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: var(--blanco);
+            border: 4px solid var(--rosa);
+            border-radius: 50%;
+            top: 25px;
+            right: -12px;
+            z-index: 1;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .left {
+            left: 0;
+        }
+
+        .right {
+            left: 50%;
+        }
+
+        .right::after {
+            left: -12px;
+        }
+
+        .timeline-content {
+            padding: 30px;
+            background: var(--blanco);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+        }
+
+        .timeline-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--verde-principal);
+            margin-bottom: 15px;
+        }
+
+        /* Impact Section */
+        .impact-section {
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--verde-principal) 0%, var(--verde-secundario) 100%);
+            color: var(--blanco);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .impact-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.05" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,149.3C960,160,1056,160,1152,138.7C1248,117,1344,75,1392,53.3L1440,32L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path></svg>') no-repeat center top;
+            background-size: cover;
+        }
+
+        .impact-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .impact-card:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateY(-10px);
+        }
+
+        .impact-number {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--verde-claro);
+            margin-bottom: 15px;
+        }
+
+        .impact-label {
+            font-size: 1.2rem;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 0;
+            background: linear-gradient(135deg, var(--rosa) 0%, #c4006c 100%);
+            color: var(--blanco);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,160L48,144C96,128,192,96,288,106.7C384,117,480,171,576,186.7C672,203,768,181,864,154.7C960,128,1056,96,1152,101.3C1248,107,1344,149,1392,170.7L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat center bottom;
+            background-size: cover;
+        }
+
+        .cta-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-subtitle {
+            font-size: 1.4rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+        }
+
+        .btn-light {
+            background: var(--blanco);
+            color: var(--rosa);
+            border: none;
+            font-weight: 600;
+            padding: 15px 40px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255,255,255,0.3);
+        }
+
+        .btn-light:hover {
+            background: var(--gris-claro);
+            color: var(--rosa);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255,255,255,0.4);
+        }
+
+        .btn-outline-light {
+            border: 2px solid var(--blanco);
+            color: var(--blanco);
+            background: transparent;
+            font-weight: 600;
+            padding: 13px 40px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-light:hover {
+            background: var(--blanco);
+            color: var(--rosa);
+            transform: translateY(-3px);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--gris-oscuro);
+            color: var(--blanco);
+            padding: 60px 0 30px;
+        }
+
+        .footer-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--verde-claro);
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: block;
+            padding: 5px 0;
+        }
+
+        .footer-links a:hover {
+            color: var(--verde-claro);
+            transform: translateX(5px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 40px;
+            padding-top: 30px;
+            text-align: center;
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .timeline::after {
+                left: 31px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item::after {
+                left: 21px;
+            }
+            
+            .right {
+                left: 0;
+            }
+            
+            .hero-stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .stat-number {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Scroll animations */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+
+        .scroll-animate.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-shield-virus me-2"></i>
+                Vigilantes del Aedes
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#problema">El Problema</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#solucion">La Solución</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#impacto">Impacto</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-primary ms-2" href="javascript:void(0)" onclick="goToApp()">
+                            <i class="fas fa-bug-slash me-1"></i>
+                            Reportar Criadero
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7 hero-content">
+                    <h1 class="hero-title fade-in-up">
+                        Transformando la lucha contra el dengue en Posadas
+                    </h1>
+                    <p class="hero-subtitle fade-in-up">
+                        Una solución tecnológica colaborativa que une a ciudadanos y gobierno en la prevención del Aedes aegypti mediante reportes ciudadanos, gamificación y análisis de datos en tiempo real.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3 mb-4">
+                        <a href="#solucion" class="btn btn-primary btn-lg">
+                            <i class="fas fa-rocket me-2"></i>
+                            Conoce nuestra solución
+                        </a>
+                        <a href="#dashboard" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-chart-line me-2"></i>
+                            Ver Dashboard
+                        </a>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="hero-stat">
+                            <div class="hero-stat-number">631</div>
+                            <div class="hero-stat-label">Casos sospechosos 2025</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="hero-stat-number">18.8%</div>
+                            <div class="hero-stat-label">Índice de Vivienda</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="hero-stat-number">319</div>
+                            <div class="hero-stat-label">Cubiertas eliminadas</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 text-center">
+                    <div class="hero-visual">
+                        <i class="fas fa-mosquito" style="font-size: 20rem; opacity: 0.1; color: var(--blanco);"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="stat-card scroll-animate">
+                        <div class="stat-number">631</div>
+                        <div class="stat-label">Casos sospechosos de dengue en 2025</div>
+                        <div class="stat-trend trend-up">
+                            <i class="fas fa-arrow-up me-1"></i>
+                            +45% vs 2024
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="stat-card scroll-animate">
+                        <div class="stat-number">61%</div>
+                        <div class="stat-label">Criaderos en objetos inservibles</div>
+                        <div class="stat-trend trend-up">
+                            <i class="fas fa-exclamation-triangle me-1"></i>
+                            Crítico
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="stat-card scroll-animate">
+                        <div class="stat-number">18.8%</div>
+                        <div class="stat-label">Índice de Vivienda (en emergencia)</div>
+                        <div class="stat-trend trend-up">
+                            <i class="fas fa-home me-1"></i>
+                            Nivel de riesgo alto
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="stat-card scroll-animate">
+                        <div class="stat-number">319</div>
+                        <div class="stat-label">Cubiertas eliminadas en una semana</div>
+                        <div class="stat-trend trend-down">
+                            <i class="fas fa-arrow-down me-1"></i>
+                            Acción efectiva
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>   
+ <!-- Problem Section -->
+    <section id="problema" class="problem-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 mb-5">
+                    <h2 class="section-title scroll-animate">El Problema</h2>
+                    <p class="section-subtitle scroll-animate">
+                        En Posadas, el mosquito Aedes aegypti está presente todo el año, no solo en temporada de lluvias. A pesar de los esfuerzos municipales, la prevención sigue siendo un desafío complejo.
+                    </p>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="problem-card scroll-animate">
+                        <div class="problem-icon">
+                            <i class="fas fa-users-slash"></i>
+                        </div>
+                        <h3 class="problem-title">Participación Ciudadana Esporádica</h3>
+                        <p>La participación ciudadana depende de campañas intensivas y no se mantiene constante a lo largo del año, reduciendo la efectividad de las medidas preventivas.</p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="problem-card scroll-animate">
+                        <div class="problem-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3 class="problem-title">Sistemas de Reporte Lentos</h3>
+                        <p>Los canales tradicionales de reporte son lentos y no generan feedback inmediato al ciudadano, desalentando la participación continua.</p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="problem-card scroll-animate">
+                        <div class="problem-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h3 class="problem-title">Datos Desactualizados</h3>
+                        <p>Los equipos municipales trabajan con información desactualizada, lo que reduce la eficiencia en la asignación de recursos y respuesta a focos críticos.</p>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="problem-card scroll-animate">
+                        <div class="problem-icon">
+                            <i class="fas fa-comments-slash"></i>
+                        </div>
+                        <h3 class="problem-title">Comunicación Fragmentada</h3>
+                        <p>No existe un canal ágil y bidireccional de comunicación entre ciudadanos y municipio para coordinar acciones preventivas efectivas.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-lg-8 mx-auto">
+                    <div class="chart-placeholder scroll-animate">
+                        <div class="text-center">
+                            <i class="fas fa-chart-line" style="font-size: 4rem; color: var(--rojo-danger); opacity: 0.6;"></i>
+                            <h4 class="mt-3 mb-2">Evolución de Casos de Dengue</h4>
+                            <p class="text-muted">Casos por semana epidemiológica - Tendencia creciente</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section id="solucion" class="solution-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center mb-5">
+                    <h2 class="section-title scroll-animate">Nuestra Solución</h2>
+                    <p class="section-subtitle scroll-animate">
+                        "Vigilantes del Aedes" es una plataforma web que transforma la prevención del dengue en una actividad comunitaria, constante y gratificante mediante tecnología, gamificación y análisis de datos.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="row g-4 mb-5">
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card scroll-animate">
+                        <div class="feature-icon">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3 class="feature-title">Reporte Ciudadano Inteligente</h3>
+                        <p class="feature-description">
+                            Los vecinos reportan criaderos con fotos, geolocalización y descripción detallada desde cualquier dispositivo, creando una red de vigilancia comunitaria.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card scroll-animate">
+                        <div class="feature-icon">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <h3 class="feature-title">Gamificación Motivacional</h3>
+                        <p class="feature-description">
+                            Sistema de puntos, logros y ranking entre barrios que mantiene la motivación ciudadana y fomenta la participación continua en la prevención.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card scroll-animate">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <h3 class="feature-title">Dashboard Municipal</h3>
+                        <p class="feature-description">
+                            Visualización en tiempo real de focos críticos, tendencias y métricas para optimizar la asignación de recursos y respuesta rápida.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card scroll-animate">
+                        <div class="feature-icon">
+                            <i class="fas fa-map-marked-alt"></i>
+                        </div>
+                        <h3 class="feature-title">Mapeo Inteligente</h3>
+                        <p class="feature-description">
+                            Mapa de calor que identifica zonas de riesgo y patrones de propagación para intervenciones preventivas focalizadas.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card scroll-animate">
+                        <div class="feature-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <h3 class="feature-title">Alertas Tempranas</h3>
+                        <p class="feature-description">
+                            Sistema de notificaciones automáticas a ciudadanos y equipos municipales cuando se detectan patrones de riesgo elevado.
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card scroll-animate">
+                        <div class="feature-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3 class="feature-title">Comunidad Activa</h3>
+                        <p class="feature-description">
+                            Red social de vigilantes que comparten experiencias, consejos y coordinan acciones comunitarias de prevención.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline de implementación -->
+            <div class="row">
+                <div class="col-12">
+                    <h3 class="text-center mb-5 scroll-animate" style="font-size: 2.5rem; color: var(--verde-principal); font-weight: 700;">
+                        Nuestra Hoja de Ruta
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Section -->
+    <section class="timeline-section">
+        <div class="container">
+            <div class="timeline">
+                <div class="timeline-item left">
+                    <div class="timeline-content scroll-animate">
+                        <h4 class="timeline-title">
+                            <i class="fas fa-heart me-2"></i>
+                            Fase 1: Empatizar
+                        </h4>
+                        <p>Investigación profunda del problema mediante entrevistas con ciudadanos, personal de salud y análisis de datos epidemiológicos. Identificación de actores clave y dimensiones del desafío.</p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content scroll-animate">
+                        <h4 class="timeline-title">
+                            <i class="fas fa-bullseye me-2"></i>
+                            Fase 2: Definir
+                        </h4>
+                        <p>Formulación del reto de diseño: ¿Cómo transformar la prevención del dengue en una actividad comunitaria sostenible, motivadora y efectiva?</p>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="timeline-content scroll-animate">
+                        <h4 class="timeline-title">
+                            <i class="fas fa-lightbulb me-2"></i>
+                            Fase 3: Idear
+                        </h4>
+                        <p>Generación de múltiples soluciones mediante brainstorming colaborativo y selección de "Vigilantes del Aedes" como la propuesta más viable e innovadora.</p>
+                    </div>
+                </div>
+                <div class="timeline-item right">
+                    <div class="timeline-content scroll-animate">
+                        <h4 class="timeline-title">
+                            <i class="fas fa-code me-2"></i>
+                            Fase 4: Prototipar
+                        </h4>
+                        <p>Desarrollo del MVP con PWA para ciudadanos, dashboard administrativo para gestión municipal y sistema de gamificación para mantener el engagement.</p>
+                    </div>
+                </div>
+                <div class="timeline-item left">
+                    <div class="timeline-content scroll-animate">
+                        <h4 class="timeline-title">
+                            <i class="fas fa-presentation me-2"></i>
+                            Fase 5: Presentar
+                        </h4>
+                        <p>Comunicación de la solución a stakeholders, validación con usuarios finales y preparación para implementación piloto en barrios seleccionados.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="dashboard-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center mb-5">
+                    <h2 class="section-title scroll-animate">Dashboard de Concientización</h2>
+                    <p class="section-subtitle scroll-animate">
+                        Visualización interactiva de datos epidemiológicos y métricas de participación ciudadana para la toma de decisiones informadas.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <div class="dashboard-card scroll-animate">
+                        <h4 class="mb-4" style="color: var(--verde-principal); font-weight: 700;">
+                            <i class="fas fa-map-marked-alt dashboard-icon" style="color: var(--verde-principal);"></i>
+                            Mapa de Calor de Reportes
+                        </h4>
+                        <div class="chart-placeholder">
+                            <div class="text-center">
+                                <i class="fas fa-map-marked-alt" style="font-size: 3rem; color: var(--verde-principal); opacity: 0.6;"></i>
+                                <p class="mt-2 mb-0">Visualización geográfica de focos reportados</p>
+                                <small class="text-muted">Intensidad según criticidad temporal</small>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <div class="d-flex justify-content-between">
+                                <span class="badge bg-success">Zonas Seguras: 45%</span>
+                                <span class="badge bg-warning">Zonas Moderadas: 35%</span>
+                                <span class="badge bg-danger">Zonas Críticas: 20%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="dashboard-card scroll-animate">
+                        <h4 class="mb-4" style="color: var(--rosa); font-weight: 700;">
+                            <i class="fas fa-chart-pie dashboard-icon" style="color: var(--rosa);"></i>
+                            Tipos de Criaderos Más Frecuentes
+                        </h4>
+                        <div class="chart-placeholder">
+                            <div class="text-center">
+                                <i class="fas fa-chart-pie" style="font-size: 3rem; color: var(--rosa); opacity: 0.6;"></i>
+                                <p class="mt-2 mb-0">Distribución de recipientes con larvas</p>
+                                <small class="text-muted">Análisis por tipo de contenedor</small>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <div class="row text-center">
+                                <div class="col-4">
+                                    <strong style="color: var(--rosa);">61%</strong>
+                                    <br><small>Objetos inservibles</small>
+                                </div>
+                                <div class="col-4">
+                                    <strong style="color: var(--amarillo-warning);">23%</strong>
+                                    <br><small>Recipientes agua</small>
+                                </div>
+                                <div class="col-4">
+                                    <strong style="color: var(--verde-principal);">16%</strong>
+                                    <br><small>Otros</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="dashboard-card scroll-animate">
+                        <h4 class="mb-4" style="color: var(--verde-secundario); font-weight: 700;">
+                            <i class="fas fa-users dashboard-icon" style="color: var(--verde-secundario);"></i>
+                            Participación Ciudadana
+                        </h4>
+                        <div class="chart-placeholder">
+                            <div class="text-center">
+                                <i class="fas fa-users" style="font-size: 3rem; color: var(--verde-secundario); opacity: 0.6;"></i>
+                                <p class="mt-2 mb-0">Evolución de reportes ciudadanos</p>
+                                <small class="text-muted">Tendencia por barrio y tiempo</small>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong style="color: var(--verde-secundario);">1,247</strong>
+                                    <br><small>Reportes este mes</small>
+                                </div>
+                                <div>
+                                    <strong style="color: var(--verde-principal);">+185%</strong>
+                                    <br><small>Crecimiento</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="dashboard-card scroll-animate">
+                        <h4 class="mb-4" style="color: var(--azul-accent); font-weight: 700;">
+                            <i class="fas fa-chart-line dashboard-icon" style="color: var(--azul-accent);"></i>
+                            Impacto de Intervenciones
+                        </h4>
+                        <div class="chart-placeholder">
+                            <div class="text-center">
+                                <i class="fas fa-chart-line" style="font-size: 3rem; color: var(--azul-accent); opacity: 0.6;"></i>
+                                <p class="mt-2 mb-0">Correlación acciones vs resultados</p>
+                                <small class="text-muted">Reducción de índices larvarios</small>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong style="color: var(--verde-principal);">-42%</strong>
+                                    <br><small>Reducción índices</small>
+                                </div>
+                                <div>
+                                    <strong style="color: var(--azul-accent);">72h</strong>
+                                    <br><small>Tiempo respuesta</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section id="impacto" class="impact-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center mb-5">
+                    <h2 class="section-title" style="color: var(--blanco);">Impacto Esperado</h2>
+                    <p class="section-subtitle" style="color: rgba(255,255,255,0.9);">
+                        Proyecciones basadas en estudios de casos similares y análisis de datos epidemiológicos de la región.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="impact-card scroll-animate">
+                        <div class="impact-number">90%</div>
+                        <div class="impact-label">Reducción en tiempo de detección de focos críticos</div>
+                        <div class="mt-3">
+                            <i class="fas fa-clock" style="font-size: 2rem; opacity: 0.7;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="impact-card scroll-animate">
+                        <div class="impact-number">300%</div>
+                        <div class="impact-label">Aumento en participación ciudadana sostenida</div>
+                        <div class="mt-3">
+                            <i class="fas fa-users" style="font-size: 2rem; opacity: 0.7;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="impact-card scroll-animate">
+                        <div class="impact-number">50%</div>
+                        <div class="impact-label">Reducción proyectada en casos de dengue</div>
+                        <div class="mt-3">
+                            <i class="fas fa-chart-line-down" style="font-size: 2rem; opacity: 0.7;"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="impact-card scroll-animate">
+                        <div class="impact-number">75%</div>
+                        <div class="impact-label">Optimización en asignación de recursos municipales</div>
+                        <div class="mt-3">
+                            <i class="fas fa-cogs" style="font-size: 2rem; opacity: 0.7;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-5">
+                <div class="col-lg-10 mx-auto">
+                    <div class="text-center">
+                        <h3 class="mb-4" style="color: var(--verde-claro); font-weight: 700;">
+                            Beneficios Adicionales
+                        </h3>
+                        <div class="row g-4">
+                            <div class="col-md-4">
+                                <div class="d-flex align-items-center justify-content-center mb-3">
+                                    <i class="fas fa-shield-alt" style="font-size: 3rem; color: var(--verde-claro);"></i>
+                                </div>
+                                <h5 style="color: var(--blanco);">Prevención Proactiva</h5>
+                                <p style="color: rgba(255,255,255,0.8);">
+                                    Identificación temprana de patrones de riesgo antes de brotes epidémicos
+                                </p>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="d-flex align-items-center justify-content-center mb-3">
+                                    <i class="fas fa-handshake" style="font-size: 3rem; color: var(--verde-claro);"></i>
+                                </div>
+                                <h5 style="color: var(--blanco);">Colaboración Ciudadana</h5>
+                                <p style="color: rgba(255,255,255,0.8);">
+                                    Fortalecimiento del vínculo entre comunidad y gobierno local
+                                </p>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="d-flex align-items-center justify-content-center mb-3">
+                                    <i class="fas fa-brain" style="font-size: 3rem; color: var(--verde-claro);"></i>
+                                </div>
+                                <h5 style="color: var(--blanco);">Decisiones Informadas</h5>
+                                <p style="color: rgba(255,255,255,0.8);">
+                                    Políticas públicas basadas en datos reales y actualizados
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h2 class="cta-title">¿Listo para unirte a la lucha contra el dengue?</h2>
+                    <p class="cta-subtitle">
+                        Forma parte de la red de Vigilantes del Aedes y ayuda a transformar Posadas en una ciudad más saludable y resiliente.
+                    </p>
+                    <div class="d-flex flex-wrap justify-content-center gap-3">
+                        <a href="javascript:void(0)" onclick="goToApp()" class="btn btn-light btn-lg">
+                            <i class="fas fa-bug-slash me-2"></i>
+                            Reportar Criadero Ahora
+                        </a>
+                        <a href="#contacto" class="btn btn-outline-light btn-lg">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Más Información
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contacto">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <h4 class="footer-title">
+                        <i class="fas fa-shield-virus me-2"></i>
+                        Vigilantes del Aedes
+                    </h4>
+                    <p style="color: rgba(255,255,255,0.8); line-height: 1.6;">
+                        Una iniciativa desarrollada durante el HackPosadas 2025 para combatir el dengue mediante tecnología, participación ciudadana y análisis de datos en tiempo real.
+                    </p>
+                    <div class="mt-4">
+                        <h5 style="color: var(--verde-claro); font-weight: 600;">Tecnologías Utilizadas</h5>
+                        <div class="d-flex flex-wrap gap-2 mt-2">
+                            <span class="badge" style="background-color: var(--verde-principal);">React</span>
+                            <span class="badge" style="background-color: var(--rosa);">Node.js</span>
+                            <span class="badge" style="background-color: var(--azul-accent);">PostgreSQL</span>
+                            <span class="badge" style="background-color: var(--amarillo-warning);">Leaflet</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-2 mb-4">
+                    <h4 class="footer-title">Navegación</h4>
+                    <div class="footer-links">
+                        <a href="#problema">El Problema</a>
+                        <a href="#solucion">La Solución</a>
+                        <a href="#dashboard">Dashboard</a>
+                        <a href="#impacto">Impacto</a>
+                        <a href="javascript:void(0)" onclick="goToApp()">Reportar Criadero</a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 mb-4">
+                    <h4 class="footer-title">Recursos</h4>
+                    <div class="footer-links">
+                        <a href="#"><i class="fas fa-file-pdf me-2"></i>Documentación Técnica</a>
+                        <a href="#"><i class="fas fa-chart-bar me-2"></i>Reportes Epidemiológicos</a>
+                        <a href="#"><i class="fas fa-graduation-cap me-2"></i>Guías de Prevención</a>
+                        <a href="#"><i class="fas fa-code me-2"></i>API Documentation</a>
+                        <a href="#"><i class="fas fa-question-circle me-2"></i>FAQ</a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 mb-4">
+                    <h4 class="footer-title">Contacto</h4>
+                    <div class="footer-links">
+                        <a href="mailto:vigilantesaedes@posadas.gov.ar">
+                            <i class="fas fa-envelope me-2"></i>
+                            vigilantesaedes@posadas.gov.ar
+                        </a>
+                        <a href="tel:+543764445555">
+                            <i class="fas fa-phone me-2"></i>
+                            (0376) 444-5555
+                        </a>
+                        <a href="#">
+                            <i class="fas fa-map-marker-alt me-2"></i>
+                            Municipalidad de Posadas, Misiones
+                        </a>
+                        <a href="#">
+                            <i class="fas fa-globe me-2"></i>
+                            www.posadas.gov.ar
+                        </a>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <h5 style="color: var(--verde-claro); font-weight: 600;">Síguenos</h5>
+                        <div class="d-flex gap-3 mt-2">
+                            <a href="#" style="color: var(--verde-claro); font-size: 1.5rem;">
+                                <i class="fab fa-facebook"></i>
+                            </a>
+                            <a href="#" style="color: var(--verde-claro); font-size: 1.5rem;">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" style="color: var(--verde-claro); font-size: 1.5rem;">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="#" style="color: var(--verde-claro); font-size: 1.5rem;">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <p>&copy; 2025 Vigilantes del Aedes. Todos los derechos reservados.</p>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <p>
+                            Desarrollado con <i class="fas fa-heart" style="color: var(--rosa);"></i> 
+                            para HackPosadas 2025
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all scroll-animate elements
+        document.querySelectorAll('.scroll-animate').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.style.background = 'linear-gradient(135deg, rgba(0, 168, 89, 0.95) 0%, rgba(0, 122, 61, 0.95) 100%)';
+                navbar.style.backdropFilter = 'blur(10px)';
+            } else {
+                navbar.style.background = 'linear-gradient(135deg, var(--verde-principal) 0%, var(--verde-secundario) 100%)';
+                navbar.style.backdropFilter = 'none';
+            }
+        });
+
+        // Counter animation for stats
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-number, .impact-number, .hero-stat-number');
+            
+            counters.forEach(counter => {
+                const originalText = counter.textContent;
+                const target = parseInt(originalText.replace(/[^\d]/g, ''));
+                const suffix = originalText.replace(/[\d]/g, ''); // Keep % or other symbols
+                const increment = target / 100;
+                let current = 0;
+                
+                const updateCounter = () => {
+                    if (current < target) {
+                        current += increment;
+                        counter.textContent = Math.ceil(current) + suffix;
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = target + suffix;
+                    }
+                };
+                
+                // Start animation when element is visible
+                const counterObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            updateCounter();
+                            counterObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.5 });
+                
+                counterObserver.observe(counter);
+            });
+        }
+
+        // Initialize counter animations
+        document.addEventListener('DOMContentLoaded', animateCounters);
+
+        // Add loading animation
+        window.addEventListener('load', () => {
+            document.body.classList.add('loaded');
+        });
+
+        // Function to navigate to the reporting app
+        function goToApp() {
+            // Simple navigation - always go to the React app
+            if (window.location.hostname === 'localhost') {
+                // In development, go to React dev server
+                window.location.href = 'http://localhost:3001/';
+            } else {
+                // In production, go to root (React app)
+                window.location.href = '/';
+            }
+        }
+    </script>
+</body>
+</html>

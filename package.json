@@ -24,7 +24,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "setup": "node setup.js"
+    "setup": "node setup.js",
+    "setup-routes": "node setup-routes.js"
   },
   "eslintConfig": {
     "extends": [

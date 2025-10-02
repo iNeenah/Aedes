@@ -1,0 +1,10 @@
+# Netlify/Vercel redirects configuration
+# Landing page as default
+/  /landing/index.html  200
+
+# App routes
+/app/*  /index.html  200
+/reportar  /index.html  200
+
+# Fallback for SPA
+/*  /index.html  200
